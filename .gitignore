@@ -1,0 +1,2 @@
+# Do not ignore the .gitkeep file in the logs folder
+!/**/.keep

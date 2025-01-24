@@ -1,5 +1,5 @@
-import subprocess
-import sys
+# import subprocess
+# import sys
 
 # # Ensure required packages are installed
 # required_packages = ['requests', 'beautifulsoup4', 'pandas', 'yfinance']
@@ -16,6 +16,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import yfinance as yf
+
 
 # URL of the webpage containing the table
 url = "https://www.slickcharts.com/sp500"
@@ -41,9 +42,12 @@ if response.status_code == 200:
         for tr in table.find("tbody").find_all("tr"):
             row = [td.text.strip() for td in tr.find_all("td")]
             rows.append(row)
-        
+
         # Create a DataFrame
         sp500_df = pd.DataFrame(rows, columns=headers)
+        
+        sp500_df.to_csv("~/nu_capstone/data/raw/sp500_stocks.csv", index=False)
+        print("S&P 500 stocks saved to 'sp500_stocks.csv'")
     else:
         print("Table not found in the specified div.")
 else:
@@ -64,5 +68,5 @@ sp500_df["Sector"] = sp500_df["Symbol"].apply(get_sector)
 # Get the top 50 technology stocks
 tech_stocks = sp500_df[sp500_df["Sector"] == "Technology"].iloc[:50]
 tech_stocks = tech_stocks[["Company", "Symbol"]].reset_index(drop=True)
-tech_stocks.to_csv("~/data/processed/sp50_tech_stocks.csv", index=False)
+tech_stocks.to_csv("~/nu_capstone/data/processed/sp50_tech_stocks.csv", index=False)
 print("Top 50 technology stocks saved to 'sp50_tech_stocks.csv'")
